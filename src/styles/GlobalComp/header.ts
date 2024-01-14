@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         flexDirection:'row',
         paddingStart:25,
-        paddingEnd:25
+        paddingEnd:25,
+        paddingBottom:10
     }
 })

@@ -3,7 +3,7 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { cardStyles } from '../styles/GlobalComp/card';
 
 interface CardProps {
-    styles: StyleProp<ViewStyle>,
+    styles?: StyleProp<ViewStyle>,
     children: React.ReactNode,
 }
 

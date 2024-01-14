@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text } from 'react-native'
 import { 
     Card,
@@ -6,8 +6,12 @@ import {
     CardHead 
 } from "../../../components/Card";
 import { styles } from "../../../styles/home/tasksAnalytics";
+import { TasksContext } from "../../../services/context/Tasks";
 
 const TasksAnalytics = () => {
+
+    const {tasks, numTasks, numTasksCompleted} = useContext(TasksContext);
+
     return (
         <View style={styles.container} >
             <View style={styles.cardContainer}>
@@ -15,8 +19,8 @@ const TasksAnalytics = () => {
                     <CardHead styles={styles.cardHeader}>
                         <Text style={[styles.headText, {color:'#7c3aed'}]}>Tasks</Text>
                     </CardHead>
-                    <CardContent styles={{  }}>
-                        <Text style={styles.contentText} >100</Text>
+                    <CardContent>
+                        <Text style={styles.contentText} >{numTasks}</Text>
                     </CardContent>
                 </Card>
             </View>
@@ -26,8 +30,8 @@ const TasksAnalytics = () => {
                     <CardHead styles={styles.cardHeader}>
                         <Text style={[styles.headText, {color:'#0284c7'}]}>Completed</Text>
                     </CardHead>
-                    <CardContent styles={{  }}>
-                        <Text style={styles.contentText}>10</Text>
+                    <CardContent>
+                        <Text style={styles.contentText}>{numTasksCompleted} / {numTasks}</Text>
                     </CardContent>
                 </Card>
             </View>

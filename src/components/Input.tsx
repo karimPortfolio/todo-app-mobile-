@@ -23,6 +23,7 @@ export const Input: React.FC<InputProps> = ({
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}
+            placeholderTextColor="#d1d5db"
             {...props}
             />
         </View>

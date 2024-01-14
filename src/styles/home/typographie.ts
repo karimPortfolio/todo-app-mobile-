@@ -10,11 +10,13 @@ export const styles = StyleSheet.create({
     firstText:{
         fontSize:35,
         fontWeight:'300',
+        color:'#fff'
     },
     text:{
         marginTop:15,
         fontSize:25,
-        fontWeight:'700'
+        fontWeight:'700',
+        color:'#fff'
     }
 })
 

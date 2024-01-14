@@ -6,8 +6,6 @@ export const inputStyles = StyleSheet.create({
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
-        paddingTop:10,
-        paddingBottom:10,
         width:'100%'
     },
     input: {
