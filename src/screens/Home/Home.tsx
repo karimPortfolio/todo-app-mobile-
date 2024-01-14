@@ -6,8 +6,9 @@ import { styles } from "../../styles/home/home";
 import TasksAnalytics from "./_components/TasksAnalytics";
 import SearchTask from "./_components/SearchTask";
 import { Tasks } from "../../services/context/Tasks";
+import AddTaskButton from "./_components/AddTaskBtn";
 
-const Home = () => {
+const Home = ({navigation}) => {
 
     return(
         <Tasks>
@@ -18,6 +19,7 @@ const Home = () => {
                     <SearchTask />
                     <TasksContainer />
                 </ScrollView>
+                <AddTaskButton navigation={navigation} />
             </SafeAreaView>
         </Tasks>
     )

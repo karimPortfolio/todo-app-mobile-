@@ -4,7 +4,19 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     card:{
         marginTop:20,
-        backgroundColor:'#f5f3ff',
+        //backgroundColor:'#f5f3ff',
+    },
+    cardBg1:{
+        backgroundColor:'#f5f3ff'
+    },
+    cardBg2:{
+        backgroundColor:'#ecfeff'
+    },
+    textColor1:{
+        color:'#7c3aed'
+    },
+    textColor2:{
+        color:'#0891b2'
     },
     cardHead:{
         display:'flex',
