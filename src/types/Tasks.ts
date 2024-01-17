@@ -9,12 +9,19 @@ export type TasksType = {
 
 export interface TaskContext {
     tasks: TasksType,
-    setTasks: Dispatch<SetStateAction<TasksType>>,
+    loading: boolean,
+    title: string,
+    setTitle: Dispatch<SetStateAction<string>>,
+    content: string,
+    setContent: Dispatch<SetStateAction<string>>,
     filteredTasks: TasksType,
-    setFilteredTasks: Dispatch<SetStateAction<TasksType>>,
     numTasks: number,
     numTasksCompleted: number,
     searchTask: (taskTitle: string) => void,
+    createTask: (navigation: any) => void,
+    completedTask: (id: number) => void,
+    updateTask: (id: number, title: string, content: string, navigation: any) => void,
+    deleteTask: (id: number) => void,
 }
 
 

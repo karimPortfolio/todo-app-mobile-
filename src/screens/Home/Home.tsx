@@ -11,17 +11,22 @@ import AddTaskButton from "./_components/AddTaskBtn";
 const Home = ({navigation}) => {
 
     return(
-        <Tasks>
-            <SafeAreaView style={styles.container}>
-                <ScrollView style={styles.scrollContainer}>
-                    <Typographie />
-                    <TasksAnalytics />
-                    <SearchTask />
-                    <TasksContainer />
-                </ScrollView>
-                <AddTaskButton navigation={navigation} />
-            </SafeAreaView>
-        </Tasks>
+        <SafeAreaView style={styles.container}>
+
+            <ScrollView style={styles.scrollContainer}>
+                <Typographie />
+                <TasksAnalytics />
+                <SearchTask />
+                <TasksContainer
+                navigation={navigation} 
+                />
+            </ScrollView>
+
+            <AddTaskButton 
+            navigation={navigation} 
+            />
+
+        </SafeAreaView>
     )
 }
 

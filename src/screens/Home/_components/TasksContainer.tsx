@@ -6,7 +6,7 @@ import TaskItem from "./TaskItem";
 import { styles } from "../../../styles/home/taskContainer";
 
 
-const TasksContainer = () => {
+const TasksContainer = ({navigation}) => {
 
     const {filteredTasks} = useContext(TasksContext);
 
@@ -16,7 +16,10 @@ const TasksContainer = () => {
             style={styles.listContainer}
             data={filteredTasks}
             renderItem={ ({item}) => (
-                <TaskItem task={item} />
+                <TaskItem 
+                task={item} 
+                navigation={navigation} 
+                />
             )}
             keyExtractor={ (item: Task, index: number) => 'item'+item.id }
             />

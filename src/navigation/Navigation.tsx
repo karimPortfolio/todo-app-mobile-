@@ -3,7 +3,9 @@ import { NativeStackView, createNativeStackNavigator } from '@react-navigation/n
 import React from 'react'
 import Home from '../screens/Home/Home';
 import Header from '../components/Header';
-import CreateTask from '../styles/createTasks/CreateTask';
+import CreateTask from '../screens/CreateTask/CreateTask';
+import EditTask from '../screens/EditTask/EditTask';
+
 
 const Navigation = () => {
 
@@ -22,7 +24,11 @@ const Navigation = () => {
                 <Stack.Screen 
                 name='Create New Task'
                 component={CreateTask}
-                
+                />
+
+                <Stack.Screen 
+                name='Edit Task'
+                component={EditTask}
                 />
 
             </Stack.Navigator>

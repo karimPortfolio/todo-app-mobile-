@@ -32,4 +32,42 @@ export const styles = StyleSheet.create({
     contentText:{
         marginTop:10
     },
+    cardFooter:{
+        marginTop:20,
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+        flexDirection:'row',
+    },
+    button:{
+        width:35,
+        height:35,
+        borderRadius:300,
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    buttonBgType1:{
+        backgroundColor:'#ddd6fe',
+    },
+    buttonBgType2:{
+        backgroundColor:'#a5f3fc',
+    },
+    cardFooterContainer:{
+        display:'flex',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        flexDirection:'row',
+        gap:10
+    },
+    badge:{
+        padding:8,
+        backgroundColor:'#e2e8f0',
+        alignSelf:'flex-start',
+        borderRadius:500
+    },
+    badgeText:{
+        fontWeight:'500',
+        fontSize:11
+    }
 })
