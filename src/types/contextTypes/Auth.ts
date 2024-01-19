@@ -14,7 +14,8 @@ export interface AuthContext {
     retrieveToken: () => void,
     signup: (name: string, email:string, password: string, confirmPassword: string) => void,
     signin: (email:string, password: string) => void,
-    logout: () => void
+    logout: () => void,
+    signinWithGoogle: () => void
 }
 
 

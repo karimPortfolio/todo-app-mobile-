@@ -3,10 +3,14 @@ import 'core-js/stable/atob';
 import { AuthContext } from "../../types/contextTypes/Auth";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { jwtDecode, JwtPayload} from 'jwt-decode';
-import { PUBLIC_API_ENDPOINT_HOST, CLIENT_ID } from '@env';
+import { 
+    PUBLIC_API_ENDPOINT_HOST,
+    CLIENT_ID_IOS,
+    CLIENT_ID_ANDROID,
+    GOOGLE_FETCH_URL 
+} from '@env';
 import { navigationRef } from "../RootNavigation";
-import { GoogleSignin } from '@react-native-community/google-signin';
-import { googleSigninInitialize } from '../../config/GoogleSignin';
+import * as Google from 'expo-auth-session/providers/google';
 
 const defaultValue = {
     AUTH: false,
@@ -15,7 +19,8 @@ const defaultValue = {
     retrieveToken: () => {},
     signup: (name: string, email:string, password: string, confirmPassword: string) => {},
     signin: (email:string, password: string) => {},
-    logout: () => {}
+    logout: () => {},
+    signinWithGoogle: () => {}
 } as AuthContext
 
 export const AuthManagementContext = createContext(defaultValue);
@@ -168,10 +173,49 @@ const Auth = ({children}: {children: React.ReactNode}) => {
     }
 
 
-    const signinWithGoogle = () => {
-        
+    //signin to google
+    const [request, response, promptAsync] = Google.useAuthRequest(
+        {
+            androidClientId: CLIENT_ID_ANDROID,
+            iosClientId: CLIENT_ID_IOS,
+            responseType: 'token',
+            scopes: ['profile'],
+            redirectUri:'com.dailytasks:/oauthredirect',
+            selectAccount:true
+        }
+        //{ authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth' }
+    );
+
+    const signinWithGoogle = async () => {
+        promptAsync();
     }
 
+    const handleSignInWithGoogle = async () => {
+        if (response?.type === 'success')
+        {
+            await getGoogleUserInfo(response.authentication?.accessToken);
+        }
+    }
+
+    const getGoogleUserInfo =  async (token: string | undefined) => {
+
+        if (!token) return;
+
+        try
+        {
+            const response = await fetch(GOOGLE_FETCH_URL, {
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            const userInfo = await response.json();
+            console.log(userInfo);
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
     
     const logout = async () => {
 
@@ -194,9 +238,14 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         const checkToken = async () => {
             await retrieveToken();
         }
-        googleSigninInitialize();
         checkToken();
-    },[])
+    },[]);
+
+    useEffect( () => {
+        if (response) {
+            handleSignInWithGoogle();
+        }
+    },[response]);
 
     const value = {
         AUTH,
@@ -205,7 +254,8 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         retrieveToken,
         signup,
         signin,
-        logout
+        logout,
+        signinWithGoogle
     }
 
     return(

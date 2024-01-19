@@ -8,14 +8,13 @@
     "jsx": "react-native",
     "strict": true,
     "esModuleInterop": true,
-    "typeRoots": ["./src/types"]
+    "typeRoots": ["./src/types"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": [
-    "/*.ts",
-    "/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["/*.ts", "/*.tsx"],
+  "exclude": [ "node_modules"],
   "extends": "expo/tsconfig.base"
 }
