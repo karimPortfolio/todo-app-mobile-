@@ -10,5 +10,16 @@ export const styles = StyleSheet.create({
         width:'100%',
         paddingLeft:25,
         paddingRight:25,
+    },
+    notFoundContainer: {
+        paddingTop:90,
+        paddingLeft:25,
+        paddingRight:25,
+    },
+    notFoundText: {
+        fontSize:20,
+        color:'#fff',
+        fontWeight:'500',
+        textAlign:'center'
     }
 })

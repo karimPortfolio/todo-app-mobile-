@@ -17,6 +17,7 @@ export interface TaskContext {
     filteredTasks: TasksType,
     numTasks: number,
     numTasksCompleted: number,
+    fetchTasks: () => void,
     searchTask: (taskTitle: string) => void,
     createTask: (navigation: any) => void,
     completedTask: (id: number) => void,

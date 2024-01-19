@@ -20,6 +20,7 @@ export const Button: React.FC<ButtonProps> = ({
             <TouchableOpacity
             style={[buttonStyles.button, styles]}
             onPress={onPress}
+            {...props}
             >
                 {children}
             </TouchableOpacity>

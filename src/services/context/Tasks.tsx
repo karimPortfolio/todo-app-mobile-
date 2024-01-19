@@ -1,6 +1,10 @@
-import React, { createContext, useState, useEffect } from "react";
-import type { TaskContext, TasksType } from "../../types/Tasks";
+import React, { createContext, useState, useEffect, useRef, useContext } from "react";
+import type { TaskContext, TasksType } from '../index';
 import { PUBLIC_API_ENDPOINT_HOST } from '@env';
+import { useNavigation } from "@react-navigation/native";
+import { navigationRef } from "../RootNavigation";
+import { AuthManagementContext } from "./Auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const defaultValue = {
@@ -13,6 +17,7 @@ const defaultValue = {
     filteredTasks: [],
     numTasks: 0,
     numTasksCompleted: 0,
+    fetchTasks: () => {},
     searchTask: (taskTitle: string) => {},
     createTask: (navigation: any) => {},
     completedTask: (id: number) => {},
@@ -38,26 +43,56 @@ export const Tasks = ({
     const [numTasksCompleted, setNumTasksCompleted] = useState<number>(0);
     const [message, setMessage] = useState('');
 
+    const {AUTH} = useContext(AuthManagementContext);
+    const {user} = useContext(AuthManagementContext);
+
+    const navigation = navigationRef;
+
 
     //get tasks from server using RESTFulAPI
     const fetchTasks = async () => {
-        const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/1`;
 
-        console.log(url);
         try
         {
-            setLoading(true);
-            const response = await fetch(url);
-            const result = await response.json();
-            if (result.type === 'failed' && result.message)
+            const token = await AsyncStorage.getItem('token');
+            let user: any = await AsyncStorage.getItem('profile');
+            user = JSON.parse(user);
+
+            if (!token || !user)
             {
-                setMessage(result.message);
-                alert(result.message);
-            } 
-            else if (result.type === 'success' && result.tasks)
-            {
-                setTasks(result.tasks);
+                setTasks([]);
+                return;
             }
+
+            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${JSON.parse(user.id)}`;
+            console.log(url+' '+'GET');
+
+            if (token)
+            {
+                setLoading(true);
+                const response = await fetch(url, {
+                    headers:{
+                        'Authorization': `Bearer ${JSON.parse(token)}`
+                    }
+                });
+                const result = await response.json();
+                if (result.type === 'failed' && result.message)
+                {
+                    setMessage(result.message);
+                    alert(result.message);
+                    if (response.status === 401)
+                    {
+                        navigation.navigate('Signup');
+                    }
+                    
+                } 
+                else if (result.type === 'success' && result.tasks)
+                {
+                    console.log(tasks);
+                    setTasks(result.tasks);
+                }
+            }
+            
         }
         catch(err)
         {
@@ -67,10 +102,12 @@ export const Tasks = ({
         {
             setLoading(false);
         }
+
     }
 
     //search and filter tasks
     const searchTask = (taskTitle: string) => {
+        setLoading(true);
         const filterTasks = tasks.filter( task => {
             if (task.title.toLowerCase().includes(taskTitle.toLowerCase()))
             {
@@ -78,6 +115,9 @@ export const Tasks = ({
             }
         });
         setFilteredTasks(filterTasks);
+        setTimeout( ()  => {
+            setLoading(false);
+        }, 200)
     }
 
     //calc number of tasks completed
@@ -92,40 +132,59 @@ export const Tasks = ({
         setLoading(true);
         setTimeout( async () => {
             
-            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/1/store`;
-
-            try
+            if (AUTH && user)
             {
-                const newTask = {
-                    title:title,
-                    content:content
-                }
-                const response = await fetch(url, {
-                    method:'POST',
-                    body: JSON.stringify(newTask),
-                    headers:{
-                        'Content-type':'application/json',
+                const token = await AsyncStorage.getItem('token');
+                const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${user.id}/store`;
+                console.log(url+' '+'POST');
+                try
+                {
+                    if (token)
+                    {
+                        const newTask = {
+                            title:title,
+                            content:content
+                        }
+                        const response = await fetch(url, {
+                            method:'POST',
+                            body: JSON.stringify(newTask),
+                            headers:{
+                                'Content-type':'application/json',
+                                'Authorization':`Bearer ${JSON.parse(token)}`,
+                            }
+                        })
+                        const result = await response.json();
+                        if (result.type === 'failed')
+                        {
+                            setMessage(result.message);
+                            if (response.status === 401)
+                            {
+                                navigation.navigate('Signin');
+                            }
+                        } 
+                        else if (result.type === 'success')
+                        {
+                            setTasks(result.tasks);
+                        }
+                        alert(result.message);
                     }
-                })
-                const result = await response.json();
-                if (result.type === 'failed')
-                {
-                    setMessage(result.message);
-                } 
-                else if (result.type === 'success')
-                {
-                    setTasks(result.tasks);
                 }
-                alert(result.message);
+                catch (err)
+                {
+                    console.log(err);
+                }
+                finally
+                {
+                    setLoading(false);
+                    fetchTasks();
+                    navigation.navigate('Home');
+                }
             }
-            catch (err)
-            {
-                console.log(err);
-            }
-            finally
+            else
             {
                 setLoading(false);
-                navigation.navigate('Home');
+                alert('Sign in first to continue');
+                navigation.navigate('Signup');
             }
 
         }, 3000);
@@ -136,24 +195,39 @@ export const Tasks = ({
     const completedTask = async (id: number) => { 
 
         setLoading(true);
-        const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/completed`;
         
         try
         {
-            const response = await fetch(url, { method:'PUT'});
-            const result = await response.json();
-            if (result.type === 'failed' && result.message)
-            {
-                setMessage(result.message);
-                console.log(result);
-            } 
-            else if (result.type === 'success' && result.tasks)
-            {
-                console.log(result);
-                setTasks(result.tasks);
-            }
-            alert(result.message);
+            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/completed`;
+            console.log(url+' '+'PUT');
 
+            const token = await AsyncStorage.getItem('token');
+            if (token)
+            {
+                const response = await fetch(url, { 
+                    method:'PUT',
+                    headers:{
+                        'Authorization': `Bearer ${JSON.parse(token)}`,
+                    }
+                });
+                const result = await response.json();
+                if (result.type === 'failed' && result.message)
+                {
+                    setMessage(result.message);
+                    console.log(result);
+                    if (response.status === 401)
+                    {
+                        navigation.navigate('Signin');
+                    }
+                } 
+                else if (result.type === 'success' && result.tasks)
+                {
+                    console.log(result);
+                    setTasks(result.tasks);
+                }
+                alert(result.message);
+            }
+            
         }
         catch (err)
         {
@@ -175,36 +249,45 @@ export const Tasks = ({
         setTimeout( async () => {
 
             const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/update`;
+            console.log(url+' '+'PUT');
 
             try
             {
-    
-                const task = {
+                const token = await AsyncStorage.getItem('token');
+                if (token)
+                {
+                    const task = {
                     title: title,
                     content: content,
-                }
-    
-                const response = await fetch(url, {
-                    method:'PUT',
-                    body: JSON.stringify(task),
-                    headers: {
-                        'Content-type': 'application/json',
                     }
-                });
-                const result = await response.json();
+        
+                    const response = await fetch(url, {
+                        method:'PUT',
+                        body: JSON.stringify(task),
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Authorization': `Bearer ${JSON.parse(token)}`,
+                        }
+                    });
+                    const result = await response.json();
+        
+                    if (result.type === 'failed' && result.message)
+                    {
+                        setMessage(result.message);
+                        console.log(result);
+                        if (response.status === 401)
+                        {
+                            navigation.navigate('Signin');
+                        }
+                    } 
+                    else if (result.type === 'success' && result.tasks)
+                    {
+                        console.log(result);
+                        setTasks(result.tasks);
+                    }
     
-                if (result.type === 'failed' && result.message)
-                {
-                    setMessage(result.message);
-                    console.log(result);
-                } 
-                else if (result.type === 'success' && result.tasks)
-                {
-                    console.log(result);
-                    setTasks(result.tasks);
+                    alert(result.message);
                 }
-
-                alert(result.message);
                 
             }
             catch (err)
@@ -225,26 +308,42 @@ export const Tasks = ({
     //delete task
     const deleteTask = async (id: number) => {
 
-        const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/destroy`;
+        
 
         try
         {
+            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/destroy`;
+            console.log(url+' '+'DELETE');
 
-            const response = await fetch(url, {method:'DELETE'});
-            const result = await response.json();
-
-            if (result.type === 'failed' && result.message)
+            const token = await AsyncStorage.getItem('token');
+            if (token)
             {
-                setMessage(result.message);
-                console.log(result);
-            } 
-            else if (result.type === 'success' && result.tasks)
-            {
-                console.log(result);
-                setTasks(result.tasks);
+                const response = await fetch(url, {
+                    method:'DELETE',
+                    headers:{
+                        'Authorization': `Bearer ${JSON.parse(token)}`,
+                    }
+                });
+                const result = await response.json();
+    
+                if (result.type === 'failed' && result.message)
+                {
+                    setMessage(result.message);
+                    console.log(result);
+                    if (response.status === 401)
+                    {
+                        navigation.navigate('Signin');
+                    }
+                } 
+                else if (result.type === 'success' && result.tasks)
+                {
+                    console.log(result);
+                    setTasks(result.tasks);
+                }
+    
+                alert(result.message);
             }
-
-            alert(result.message);
+            
             
         }
         catch (err)
@@ -259,14 +358,25 @@ export const Tasks = ({
 
     }
 
+    //render Tasks and wait until the async function done processing
     useEffect( () => {
-        fetchTasks();
-    },[]);
+        const fetchData = async () => {
+            await fetchTasks();
+        }
+        fetchData();
+    },[AUTH]);
 
+    //re-render Tasks related information only if tasks state changes
     useEffect( () => {
-        setNumTasks(tasks.length);
-        setNumTasksCompleted(calcNumTasksCompleted())
-        setFilteredTasks(tasks);
+        const relatedTasksMethods = () => {
+            if (tasks)
+            {
+                setNumTasks(tasks.length);
+                setNumTasksCompleted(calcNumTasksCompleted())
+                setFilteredTasks(tasks);
+            }
+        }
+        relatedTasksMethods();
     },[tasks])
 
 
@@ -280,11 +390,12 @@ export const Tasks = ({
         filteredTasks,
         numTasks,
         numTasksCompleted,
+        fetchTasks,
         searchTask,
         createTask,
         completedTask,
         updateTask,
-        deleteTask
+        deleteTask,
     }
 
     return(
