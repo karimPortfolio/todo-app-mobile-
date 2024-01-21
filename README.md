@@ -1,4 +1,4 @@
-# DailyTasks Todo List Mobile Application
+# DailyTasks
 
 ## Todo List Mobile Application
 
