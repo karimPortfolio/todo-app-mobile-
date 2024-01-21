@@ -103,23 +103,27 @@ This is my first mobile application using React Native, designed to help users m
 
 2. Navigate to the project directory:
 
+   ```bash
    cd todo-list-mobile-app
 
 3.   Install expo:
 
+    ```bash
     npm install -g expo-cli
 
 5. Install dependencies:
 
+   ```bash
    npm install
 
 6. Set up environment variables.
 
 7. Start the application:
 
+   ```bash
    npm start
 
-8. Open the application in your preferred mobile emulator or device using expo Go.
+9. Open the application in your preferred mobile emulator or device using expo Go.
 
 ## Usage
 
