@@ -1,9 +1,15 @@
-# TODO-APP-MOBILE
+# DailyTasks Todo List Mobile Application
 
-## My first react native mobile app
+## Todo List Mobile Application
 
 <br>
-<br>
+
+# Todo List Mobile Application
+
+## Overview
+
+This is my first mobile application using React Native, designed to help users manage their daily tasks efficiently. The application provides a user-friendly UI to add, delete, edit tasks, and change task statuses to complete or incomplete. It also features a secure authentication system using JWT tokens and Google OAuth for user login.
+
 
 ### Welcome screen
 
@@ -59,3 +65,70 @@
 
 <img src="https://github.com/KarimPortfolio/todo-app-mobile-/assets/92030288/df8027d7-de30-4bd2-88e5-aea81995760a" width="430" height="auto">
 
+<br>
+<br>
+
+## Features
+
+- **User-Friendly Interface**: The application offers an intuitive and easy-to-use interface, making task management a breeze.
+
+- **Task Management**: Users can add new tasks, delete existing tasks, edit task details, and mark tasks as complete or incomplete.
+
+- **Authentication System**: The application ensures secure user authentication using JWT tokens and Google OAuth. This adds an extra layer of protection to user accounts.
+
+## Technologies Used
+
+- **React Native**: The application is built using the React Native framework, allowing for cross-platform compatibility.
+
+- **Redux**: Redux is used for state management, ensuring a centralized and predictable state for the application.
+
+- **Node.js**: The backend server is built using Node.js to handle authentication, task management, and database interactions.
+
+- **Express.js**: Express is used as the web application framework for the Node.js server.
+
+- **MongoDB**: MongoDB is employed as the database to store user information and task data.
+
+- **JWT (JSON Web Tokens)**: JWT tokens are utilized for secure user authentication.
+
+- **Google OAuth**: Google OAuth is implemented for user login, providing a secure and convenient authentication method.
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/todo-list-mobile-app.git
+
+2. Navigate to the project directory:
+
+   cd todo-list-mobile-app
+
+3.   Install expo:
+
+    npm install -g expo-cli
+
+5. Install dependencies:
+
+   npm install
+
+6. Set up environment variables.
+
+7. Start the application:
+
+   npm start
+
+8. Open the application in your preferred mobile emulator or device using expo Go.
+
+## Usage
+
+1. Register a new account or log in using your Google account.
+
+2. Start adding, editing, and managing your tasks using the user-friendly interface.
+
+3. Log out when done to secure your account.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Happy Task Managing!
