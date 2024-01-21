@@ -136,4 +136,7 @@ This is my first mobile application using React Native, designed to help users m
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+<br>
+<br>
+
 ## Happy Task Managing!
