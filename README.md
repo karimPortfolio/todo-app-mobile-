@@ -80,13 +80,17 @@ This is my first mobile application using React Native, designed to help users m
 
 - **React Native**: The application is built using the React Native framework, allowing for cross-platform compatibility.
 
-- **Redux**: Redux is used for state management, ensuring a centralized and predictable state for the application.
+- **Expo**: Expo is used to enhance the React Native development experience by providing a set of tools and services for building React Native apps more efficiently.
+
+- **ContextAPI**: Context is used for state management, ensuring a centralized and predictable state for the application.
 
 - **Node.js**: The backend server is built using Node.js to handle authentication, task management, and database interactions.
 
 - **Express.js**: Express is used as the web application framework for the Node.js server.
 
-- **MongoDB**: MongoDB is employed as the database to store user information and task data.
+- **MySQL**: MySQL is employed as the database to store user information and task data.
+
+-  **Prisma**: Prisma is used as an ORM (Object-Relational Mapping) tool to simplify database interactions and improve the efficiency of database queries.
 
 - **JWT (JSON Web Tokens)**: JWT tokens are utilized for secure user authentication.
 
