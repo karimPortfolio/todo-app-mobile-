@@ -108,7 +108,6 @@ This is my first mobile application using React Native, designed to help users m
 
 3.   Install expo:
 
-    ```bash
     npm install -g expo-cli
 
 5. Install dependencies:
