@@ -22,6 +22,12 @@ const Form = ({navigation, task}) => {
         setContent(text);
     }
 
+    const handlePress = async () => {
+        await updateTask(task.id, title, content, navigation);
+        setTitle('');
+        setContent('');
+    }
+
     return (
         <View style={styles.container} >
 
@@ -41,7 +47,7 @@ const Form = ({navigation, task}) => {
 
             <Button 
             styles={styles.button}
-            onPress={ () => updateTask(task.id, title, content, navigation) }
+            onPress={handlePress}
             >
                 {loading ? (
                     <ActivityIndicator

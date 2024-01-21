@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button } from '../../components/Button'
 import { styles } from "../../styles/auth/AuthScreen";
 import { AuthManagementContext } from '../../services/context/Auth';
@@ -11,8 +11,8 @@ const AuthScreen = ({navigation}) => {
     const {fetchTasks} = useContext(TasksContext);
 
     const navigateToHomeScreen = async () => {
-        await fetchTasks();
         navigation.navigate('Home');
+        await fetchTasks();
     }
 
     const navigateToSigninScreen = () => {
@@ -22,36 +22,38 @@ const AuthScreen = ({navigation}) => {
 
     return(
         <SafeAreaView style={{ backgroundColor:'#161a2b' }} >
-            <View style={styles.container}>
-                <Text style={styles.titleText} >Focus on what matter</Text>
-                <Text style={styles.paragraphText} >Manage your daily tasks with us</Text>
-                <View style={styles.imageContainer} >
-                    <Image 
-                    source={require('../../assets/authScreenImg.png')}
-                    style={styles.image}
-                    width={200}
-                    height={200}
-                    />
+            <ScrollView style={styles.scrollView} >
+                <View style={styles.container}>
+                    <Text style={styles.titleText} >Focus on what matter</Text>
+                    <Text style={styles.paragraphText} >Manage your daily tasks with us</Text>
+                    <View style={styles.imageContainer} >
+                        <Image 
+                        source={require('../../assets/authScreenImg.png')}
+                        style={styles.image}
+                        width={200}
+                        height={200}
+                        />
+                    </View>
+                    <View style={styles.buttonsContainer} >
+                        <Button 
+                        styles={styles.button1} 
+                        onPress={navigateToHomeScreen}
+                        >
+                            <Text style={styles.button1Text} >Get Started</Text>
+                        </Button>
+                        {
+                            !AUTH ? (
+                                <Button 
+                                styles={styles.button2} 
+                                onPress={navigateToSigninScreen}
+                                >
+                                    <Text style={styles.button2Text} >Sign in</Text>
+                                </Button>
+                            ): null
+                        }
+                    </View>
                 </View>
-                <View style={styles.buttonsContainer} >
-                    <Button 
-                    styles={styles.button1} 
-                    onPress={navigateToHomeScreen}
-                    >
-                        <Text style={styles.button1Text} >Get Started</Text>
-                    </Button>
-                    {
-                        !AUTH ? (
-                            <Button 
-                            styles={styles.button2} 
-                            onPress={navigateToSigninScreen}
-                            >
-                                <Text style={styles.button2Text} >Sign in</Text>
-                            </Button>
-                        ): null
-                    }
-                </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

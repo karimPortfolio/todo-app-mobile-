@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme":"dailytasks",
+    "scheme": "com.googleusercontent.apps.651112901842-dfipk20vlco0d2l0a9o4hlsgncql8c3l",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
@@ -21,8 +21,17 @@
       "config": {
         "googleSignIn": {
           "iosClientId": "651112901842-cvk57dn32a633ja2116qmevlfofsju6h.apps.googleusercontent.com",
-          "redirectUri": "com.dailytasks:/oauthredirect"
+          "redirectUri": "com.googleusercontent.apps.651112901842-dfipk20vlco0d2l0a9o4hlsgncql8c3l:/auth/callback"
         }
+      },
+      "infoPlist":{
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes":[
+              "com.googleusercontent.apps.651112901842-dfipk20vlco0d2l0a9o4hlsgncql8c3l"
+            ]
+          }
+        ]
       }
     },
     "android": {

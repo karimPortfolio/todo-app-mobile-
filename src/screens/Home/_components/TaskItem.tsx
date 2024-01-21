@@ -29,10 +29,10 @@ const TaskItem = ({
     }
 
     return(
-        <Card styles={[styles.card, task.id % 2 === 0 ? styles.cardBg2 : styles.cardBg1]}>
+        <Card styles={[styles.card, task.id % 2 === 0 ? styles.cardBg1 : styles.cardBg2]}>
             <CardHead styles={styles.cardHead}>
                 <Text 
-                style={[styles.headText, task.id % 2 === 0 ? styles.textColor2 : styles.textColor1]}
+                style={[styles.headText, task.id % 2 === 0 ? styles.textColor1 : styles.textColor2]}
                 >
                     {task.title}
                 </Text>
@@ -42,7 +42,7 @@ const TaskItem = ({
                     <Icon 
                     name='edit' 
                     size={20} 
-                    color={task.id % 2 === 0 ? styles.textColor2.color : styles.textColor1.color} 
+                    color={task.id % 2 === 0 ? styles.textColor1.color : styles.textColor2.color} 
                     />
                 </TouchableOpacity>
             </CardHead>
@@ -54,24 +54,24 @@ const TaskItem = ({
             <CardFooter styles={styles.cardFooter} >
                 <View style={styles.cardFooterContainer} >
                     <TouchableOpacity
-                    style={[styles.button, task.id % 2 === 0 ? styles.buttonBgType2 : styles.buttonBgType1]}
+                    style={[styles.button, task.id % 2 === 0 ? styles.buttonBgType1 : styles.buttonBgType2]}
                     onPress={ () => completedTask(task.id) }
                     >
                         <Icon 
                         name='check' 
                         size={20} 
-                        color={task.id % 2 === 0 ? styles.textColor2.color : styles.textColor1.color} 
+                        color={task.id % 2 === 0 ? styles.textColor1.color : styles.textColor2.color} 
                         />
                     </TouchableOpacity>
     
                     <TouchableOpacity
-                    style={[styles.button, task.id % 2 === 0 ? styles.buttonBgType2 : styles.buttonBgType1]}
+                    style={[styles.button, task.id % 2 === 0 ? styles.buttonBgType1 : styles.buttonBgType2]}
                     onPress={ () => deleteTask(task.id) }
                     >
                         <Icon 
                         name='trash' 
                         size={20} 
-                        color={task.id % 2 === 0 ? styles.textColor2.color : styles.textColor1.color} 
+                        color={task.id % 2 === 0 ? styles.textColor1.color : styles.textColor2.color} 
                         />
                     </TouchableOpacity>
                 </View>
@@ -80,9 +80,9 @@ const TaskItem = ({
                     task.isCompleted ? (
                         <View >
                             <View 
-                            style={[styles.badge, task.id % 2 === 0 ? styles.buttonBgType2 : styles.buttonBgType1]} 
+                            style={[styles.badge, task.id % 2 === 0 ? styles.buttonBgType1 : styles.buttonBgType2]} 
                             >
-                                <Text style={[styles.badgeText, task.id % 2 === 0 ? styles.textColor2 : styles.textColor1]} >Completed</Text>
+                                <Text style={[styles.badgeText, task.id % 2 === 0 ? styles.textColor1 : styles.textColor2]} >Completed</Text>
                             </View>
                         </View>
                     ) : null

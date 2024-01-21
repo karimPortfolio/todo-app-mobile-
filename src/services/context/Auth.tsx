@@ -1,26 +1,32 @@
 import React, { createContext, useEffect, useState } from "react";
 import 'core-js/stable/atob';
-import { AuthContext } from "../../types/contextTypes/Auth";
+import { AuthContext, User } from "../../types/contextTypes/Auth";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { jwtDecode, JwtPayload} from 'jwt-decode';
 import { 
     PUBLIC_API_ENDPOINT_HOST,
     CLIENT_ID_IOS,
     CLIENT_ID_ANDROID,
-    GOOGLE_FETCH_URL 
+    CLIENT_ID_WEB,
+    REDIRECT_URL,
+    GOOGLE_FETCH_USER_INFO
 } from '@env';
 import { navigationRef } from "../RootNavigation";
 import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+
 
 const defaultValue = {
     AUTH: false,
     user: {},
     loading: false,
+    provider: null,
     retrieveToken: () => {},
     signup: (name: string, email:string, password: string, confirmPassword: string) => {},
     signin: (email:string, password: string) => {},
     logout: () => {},
-    signinWithGoogle: () => {}
+    signinWithGoogle: () => {},
 } as AuthContext
 
 export const AuthManagementContext = createContext(defaultValue);
@@ -28,7 +34,8 @@ export const AuthManagementContext = createContext(defaultValue);
 const Auth = ({children}: {children: React.ReactNode}) => {
 
     const [AUTH, setAUTH] = useState<boolean>(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [provider, setProvider] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     const navigation = navigationRef;
@@ -40,14 +47,11 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         {
             const token = await AsyncStorage.getItem('token');
             const profile = await AsyncStorage.getItem('profile');
-
-            console.log(`
-                Token:${token},
-                Profile:${profile}
-            `);
+            const provider = await AsyncStorage.getItem('provider');
 
             if (token && token !== null && profile)
             {
+                const userInfo:User = JSON.parse(profile);
                 const currentTimeInSeconds = Math.floor(Date.now() / 1000);
                 const decode = await jwtDecode<JwtPayload>(token);
                 if (!decode || !decode.exp || decode.exp <= currentTimeInSeconds)
@@ -56,15 +60,17 @@ const Auth = ({children}: {children: React.ReactNode}) => {
                     alert('Session expired, please signin to continue.');
                     setAUTH(false);
                     setUser(null);
+                    setProvider(null);
                     await AsyncStorage.removeItem('token');
                     await AsyncStorage.removeItem('profile');
+                    await AsyncStorage.removeItem('provider');
                 }
                 else
                 {
                     setAUTH(true);
-                    setUser(JSON.parse(profile));
-                    console.log('no problem')
-                    // console.log('Auth state:'+AUTH);
+                    setProvider(provider);
+                    setUser(userInfo);
+                    navigation.navigate('Home');
                 }
                 
             }
@@ -72,13 +78,12 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             {
                 setAUTH(false);
                 setUser(null);
-                console.log('problem')
             }
             
         }
         catch(err)
         {
-            throw new Error(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         
     }
@@ -112,13 +117,14 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             else if (result.type === 'success' && result.auth === 'true')
             {
                 await AsyncStorage.setItem('token', JSON.stringify(result.token));
+                await AsyncStorage.setItem('provider', 'Server');
                 await AsyncStorage.setItem('profile', JSON.stringify(result.user));
                 navigation.navigate('Home');
             }
         }
         catch (err)
         {
-            console.log(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         finally
         {
@@ -156,13 +162,14 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             else if (result.type === 'success' && result.auth === 'true')
             {
                 await AsyncStorage.setItem('token', JSON.stringify(result.token));
+                await AsyncStorage.setItem('provider', 'Server');
                 await AsyncStorage.setItem('profile', JSON.stringify(result.user));
                 navigation.navigate('Home');
             }
         }
         catch(err)
         {
-            console.log(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         finally
         {
@@ -178,12 +185,12 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         {
             androidClientId: CLIENT_ID_ANDROID,
             iosClientId: CLIENT_ID_IOS,
-            responseType: 'token',
-            scopes: ['profile'],
-            redirectUri:'com.dailytasks:/oauthredirect',
-            selectAccount:true
+            webClientId:CLIENT_ID_WEB,
+            scopes: ['profile', 'email'],
+            redirectUri:REDIRECT_URL,
+            selectAccount:true,
         }
-        //{ authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth' }
+        // { authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth' }
     );
 
     const signinWithGoogle = async () => {
@@ -191,9 +198,40 @@ const Auth = ({children}: {children: React.ReactNode}) => {
     }
 
     const handleSignInWithGoogle = async () => {
-        if (response?.type === 'success')
+        try
         {
-            await getGoogleUserInfo(response.authentication?.accessToken);
+            setLoading(true);
+            if (response?.type === 'success')
+            {
+                const userInfo = await getGoogleUserInfo(response.authentication?.accessToken);
+                if (!userInfo)
+                {
+                    alert('Something went wrong, Try again later.');
+                    navigation.navigate('Signup');
+                } else {
+
+                    const userProf = {
+                        id: userInfo.id,
+                        name: `${userInfo.given_name} ${userInfo.family_name}`,
+                        email: userInfo.email,
+                        profile_pic: userInfo.picture
+                    }
+                    setUser(userProf);
+                    await AsyncStorage.setItem('token',JSON.stringify(response.authentication?.idToken));
+                    await AsyncStorage.setItem('provider','Google');
+                    await AsyncStorage.setItem('profile', JSON.stringify(userProf));
+                    setAUTH(true);
+                }
+            }
+        }
+        catch (err)
+        {
+            alert('Aww! Something went wrong. Check your internet connection.');
+        }
+        finally
+        {
+            setLoading(false);
+            await retrieveToken();
         }
     }
 
@@ -202,18 +240,23 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         if (!token) return;
 
         try
-        {
-            const response = await fetch(GOOGLE_FETCH_URL, {
-                headers:{
+        {   
+            const response = await fetch(GOOGLE_FETCH_USER_INFO, {
+                headers: {
                     'Authorization': `Bearer ${token}`,
                 }
             });
-            const userInfo = await response.json();
-            console.log(userInfo);
+            if (response.ok) {
+                const userInfo = await response.json();
+                return userInfo;
+            } else {
+                console.error('Error fetching user info:', response.status, response.statusText);
+                return null;
+            }
         }
         catch(err)
         {
-            console.log(err)
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
     }
     
@@ -223,13 +266,15 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         {
             await AsyncStorage.removeItem('token');
             await AsyncStorage.removeItem('profile');
+            await AsyncStorage.removeItem('provider');
             setAUTH(false);
             setUser(null);
+            setProvider(null);
             navigation.navigate('Signin');
         }
         catch(err)
         {
-            console.log(err)
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
 
     }
@@ -239,6 +284,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             await retrieveToken();
         }
         checkToken();
+        WebBrowser.maybeCompleteAuthSession();
     },[]);
 
     useEffect( () => {
@@ -251,6 +297,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         AUTH,
         user,
         loading,
+        provider,
         retrieveToken,
         signup,
         signin,

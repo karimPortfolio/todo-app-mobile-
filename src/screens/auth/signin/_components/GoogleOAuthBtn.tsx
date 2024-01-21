@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View, ActivityIndicator } from "react-native";
 import { AuthManagementContext, Button } from "../../index";
 import { GoogleLogo } from "../../index";
 import { styles } from "../../../../styles/auth/signin/GoogleoAuthBtn";
@@ -7,6 +7,7 @@ import { styles } from "../../../../styles/auth/signin/GoogleoAuthBtn";
 const GoogleOAuthBtn = () => {
 
     const {signinWithGoogle} = useContext(AuthManagementContext);
+    const {loading} = useContext(AuthManagementContext);
 
     return(
         <View style={styles.container} >
@@ -15,12 +16,26 @@ const GoogleOAuthBtn = () => {
                 <Text>Or</Text>
                 <View style={styles.hrLine}></View>
             </View>
-            <Button 
-            styles={styles.button}
-            onPress={signinWithGoogle}>
-                <GoogleLogo />
-                <Text style={styles.buttonText}>Sign in with Google</Text>
-            </Button>
+            {
+                loading ? (
+                    <Button 
+                    styles={styles.button}
+                    onPress={signinWithGoogle}
+                    disabled={loading}
+                    >
+                        <ActivityIndicator 
+                        color='#fff'
+                        />
+                    </Button>
+                ) : (
+                    <Button 
+                    styles={styles.button}
+                    onPress={signinWithGoogle}>
+                        <GoogleLogo />
+                        <Text style={styles.buttonText}>Sign in with Google</Text>
+                    </Button>
+                )
+            }
         </View>
     )
 }

@@ -45,34 +45,38 @@ export const Tasks = ({
 
     const {AUTH} = useContext(AuthManagementContext);
     const {user} = useContext(AuthManagementContext);
+    const {provider} = useContext(AuthManagementContext);
 
     const navigation = navigationRef;
 
 
     //get tasks from server using RESTFulAPI
     const fetchTasks = async () => {
-
+        
         try
         {
+            setLoading(true);
             const token = await AsyncStorage.getItem('token');
             let user: any = await AsyncStorage.getItem('profile');
+            const provider = await AsyncStorage.getItem('provider');
             user = JSON.parse(user);
 
-            if (!token || !user)
+            if (!token || !user || !provider)
             {
                 setTasks([]);
                 return;
             }
 
-            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${JSON.parse(user.id)}`;
+            const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${user.id}`;
             console.log(url+' '+'GET');
 
             if (token)
             {
-                setLoading(true);
+                
                 const response = await fetch(url, {
                     headers:{
-                        'Authorization': `Bearer ${JSON.parse(token)}`
+                        'Authorization': `Bearer ${JSON.parse(token)}`,
+                        'X-Token-Origin':provider,
                     }
                 });
                 const result = await response.json();
@@ -82,13 +86,12 @@ export const Tasks = ({
                     alert(result.message);
                     if (response.status === 401)
                     {
-                        navigation.navigate('Signup');
+                        navigation.navigate('Signin');
                     }
                     
                 } 
                 else if (result.type === 'success' && result.tasks)
                 {
-                    console.log(tasks);
                     setTasks(result.tasks);
                 }
             }
@@ -96,7 +99,7 @@ export const Tasks = ({
         }
         catch(err)
         {
-            console.log(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         finally
         {
@@ -132,7 +135,7 @@ export const Tasks = ({
         setLoading(true);
         setTimeout( async () => {
             
-            if (AUTH && user)
+            if (AUTH && user && provider)
             {
                 const token = await AsyncStorage.getItem('token');
                 const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${user.id}/store`;
@@ -150,7 +153,8 @@ export const Tasks = ({
                             body: JSON.stringify(newTask),
                             headers:{
                                 'Content-type':'application/json',
-                                'Authorization':`Bearer ${JSON.parse(token)}`,
+                                'Authorization': `Bearer ${JSON.parse(token)}`,
+                                'X-Token-Origin':provider,
                             }
                         })
                         const result = await response.json();
@@ -171,12 +175,14 @@ export const Tasks = ({
                 }
                 catch (err)
                 {
-                    console.log(err);
+                    alert('Aww! Something went wrong. Check your internet connection.');
                 }
                 finally
                 {
                     setLoading(false);
                     fetchTasks();
+                    setTitle('');
+                    setContent('');
                     navigation.navigate('Home');
                 }
             }
@@ -184,7 +190,7 @@ export const Tasks = ({
             {
                 setLoading(false);
                 alert('Sign in first to continue');
-                navigation.navigate('Signup');
+                navigation.navigate('Signin');
             }
 
         }, 3000);
@@ -202,12 +208,13 @@ export const Tasks = ({
             console.log(url+' '+'PUT');
 
             const token = await AsyncStorage.getItem('token');
-            if (token)
+            if (token && provider)
             {
                 const response = await fetch(url, { 
                     method:'PUT',
                     headers:{
                         'Authorization': `Bearer ${JSON.parse(token)}`,
+                        'X-Token-Origin':provider,
                     }
                 });
                 const result = await response.json();
@@ -231,7 +238,7 @@ export const Tasks = ({
         }
         catch (err)
         {
-            console.log(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         finally
         {
@@ -254,7 +261,7 @@ export const Tasks = ({
             try
             {
                 const token = await AsyncStorage.getItem('token');
-                if (token)
+                if (token && provider)
                 {
                     const task = {
                     title: title,
@@ -267,6 +274,7 @@ export const Tasks = ({
                         headers: {
                             'Content-type': 'application/json',
                             'Authorization': `Bearer ${JSON.parse(token)}`,
+                            'X-Token-Origin':provider,
                         }
                     });
                     const result = await response.json();
@@ -292,7 +300,7 @@ export const Tasks = ({
             }
             catch (err)
             {
-                console.log(err);
+                alert('Aww! Something went wrong. Check your internet connection.');
             }
             finally
             {
@@ -308,20 +316,19 @@ export const Tasks = ({
     //delete task
     const deleteTask = async (id: number) => {
 
-        
-
         try
         {
             const url = `${PUBLIC_API_ENDPOINT_HOST}/tasks/${id}/destroy`;
             console.log(url+' '+'DELETE');
 
             const token = await AsyncStorage.getItem('token');
-            if (token)
+            if (token && provider)
             {
                 const response = await fetch(url, {
                     method:'DELETE',
                     headers:{
                         'Authorization': `Bearer ${JSON.parse(token)}`,
+                        'X-Token-Origin':provider,
                     }
                 });
                 const result = await response.json();
@@ -348,7 +355,7 @@ export const Tasks = ({
         }
         catch (err)
         {
-            console.log(err);
+            alert('Aww! Something went wrong. Check your internet connection.');
         }
         finally
         {

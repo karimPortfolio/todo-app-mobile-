@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
+    scrollView:{
+        height:'100%',
+    },
     container: {
         paddingTop:35,
         backgroundColor:'#161a2b',
@@ -10,13 +13,13 @@ export const styles = StyleSheet.create({
         paddingEnd:25,
     },
     titleText:{
-        fontSize:32,
+        fontSize:33,
         fontWeight:'600',
-        color:'#7c3aed'
+        color:'#a78bfa'
     },
     paragraphText: {
         marginTop:15,
-        fontSize:30,
+        fontSize:21,
         fontWeight:'600',
         color:'#fff'
     },

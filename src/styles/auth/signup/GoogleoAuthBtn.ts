@@ -13,7 +13,15 @@ export const styles = StyleSheet.create({
         gap:7,
         height:55,
         backgroundColor:'#0f172a',
-        borderRadius:500
+        borderRadius:500,
+        shadowColor: "#000000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity:  0.17,
+        shadowRadius: 3.05,
+        elevation: 4
     },
     buttonText:{
         color:'white',

@@ -46,6 +46,7 @@ const FormBox = () => {
             <Button 
             styles={styles.button} 
             onPress={handleSigninBtnPress}
+            disabled={loading}
             >
                 {
                     loading ? (

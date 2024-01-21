@@ -27,5 +27,19 @@ export const styles = StyleSheet.create({
         color:'#fff',
         fontSize:13,
         fontWeight:'500'
+    },
+    avatarImgContainer:{
+        width:35,
+        height:35,
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:500,
+        backgroundColor:'#7c3aed'
+    },
+    avatarImg:{
+        width:'99%',
+        height:'99%',
+        borderRadius:500,
     }
 })

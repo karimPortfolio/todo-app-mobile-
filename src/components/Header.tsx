@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Image } from "react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { styles } from "../styles/GlobalComp/header";
@@ -13,26 +13,41 @@ const Header = ({navigation}) => {
     const {user} = useContext(AuthManagementContext);
     const {logout} = useContext(AuthManagementContext);
 
-    const navigatetoAuthScreen = () => {
-        navigation.navigate('Auth Screen');
+    const navigatetoSigninScreen = () => {
+        navigation.navigate('Signin');
     } 
 
-    const userNameSplit = user ? user.name.split(' ') : null;
+
+    const userNameSplit = user?.name.split(' ');
     const userName = userNameSplit ? userNameSplit[0][0]+userNameSplit[userNameSplit.length - 1][0] : null;
+    
 
     return(
         <View style={styles.container}>
             {
-                AUTH ? (
+                AUTH ? user?.profile_pic ? (
+
+                    <View style={styles.avatarImgContainer} >
+                        <Image
+                        style={styles.avatarImg}
+                        source={{ uri:user.profile_pic }}
+                        />
+                    </View>
+
+                ) : (
+
                     <View style={styles.avatar}>
                         <Text style={styles.avatarText}> {userName} </Text>
                     </View>
+
                 ) : (
+
                     <TouchableOpacity
-                    onPress={navigatetoAuthScreen}
+                    onPress={navigatetoSigninScreen}
                     >
                         <AntDesign name="user" size={25} />
                     </TouchableOpacity>
+
                 )
             }
             <View>

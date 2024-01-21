@@ -1,18 +1,20 @@
 import React from "react"
-import { StyleProp, TextInput, TouchableOpacity, View, ViewStyle } from "react-native"
+import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 import { inputStyles } from "../styles/GlobalComp/input"
 import { buttonStyles } from '../styles/GlobalComp/button';
 
 interface ButtonProps {
     styles?: StyleProp<ViewStyle>,
     children: React.ReactNode,
+    disabled?: boolean,
     onPress?: () => void,
 }
 
 export const Button: React.FC<ButtonProps> = ({ 
     styles,
     children,
-    onPress 
+    onPress,
+    disabled,
 }, ...props) => {
 
     return(
@@ -20,6 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
             <TouchableOpacity
             style={[buttonStyles.button, styles]}
             onPress={onPress}
+            disabled={disabled ? disabled : false}
             {...props}
             >
                 {children}
