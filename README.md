@@ -4,8 +4,6 @@
 
 <br>
 
-# Todo List Mobile Application
-
 ## Overview
 
 This is my first mobile application using React Native, designed to help users manage their daily tasks efficiently. The application provides a user-friendly UI to add, delete, edit tasks, and change task statuses to complete or incomplete. It also features a secure authentication system using JWT tokens and Google OAuth for user login.
