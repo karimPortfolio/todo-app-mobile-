@@ -1,16 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import type { SignupFormBox } from "../../../../types/Auth";
 import { Input } from '../../index';
 import { Button } from '../../index';
 import { styles } from "../../../../styles/auth/signin/Formbox";
 import { AuthManagementContext } from "../../index";
+import ErrorsTexts from "./errorsTexts/ErrorsTexts";
+
+
+
 
 const FormBox = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const {message} = useContext(AuthManagementContext);
     const {loading} = useContext(AuthManagementContext);
     const {signin} = useContext(AuthManagementContext);
 
@@ -25,20 +30,27 @@ const FormBox = () => {
         setPassword('');
     }
 
+
     return(
         <View style={styles.container} >
+
+            <ErrorsTexts 
+            message={message}
+            />
 
             <FlatList 
             data={inputs}
             renderItem={ (item) => (
-                <Input 
-                styles={item.item.style}
-                value={item.item.value}
-                onChangeText={ (text: string) => item.item.changeFunction(text) }
-                placeholder={item.item.placeholder}
-                placeholderColor="#94a3b8"
-                secureTextEntry={item.item.inputSecure}
-                />
+
+                    <Input 
+                    styles={item.item.style}
+                    value={item.item.value}
+                    onChangeText={ (text: string) => item.item.changeFunction(text) }
+                    placeholder={item.item.placeholder}
+                    placeholderColor="#94a3b8"
+                    secureTextEntry={item.item.inputSecure}
+                    />
+
             )}
             keyExtractor={ (item) => ''+item.id }
             />

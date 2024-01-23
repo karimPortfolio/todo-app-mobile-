@@ -12,6 +12,15 @@ import { navigationRef } from '../services/RootNavigation';
 import Signin from '../screens/auth/signin/Signin';
 
 
+const screens = [
+    {id:1, name:'Auth Screen', component:AuthScreen, options:{ header: () => (<View></View>)}},
+    {id:2, name:'Home', component:Home, options:{ header: ({navigation}) => (<Header navigation={navigation} />)}},
+    {id:3, name:'Create New Task', component:CreateTask, options:{}},
+    {id:4, name:'Edit Task', component:EditTask, options:{}},
+    {id:5, name:'Signup', component:Signup, options:{ header: () => (<View style={{ height:40,width:'100%', backgroundColor:'#fff' }}></View>)}},
+    {id:6, name:'Signin', component:Signin, options:{ header: () => (<View></View>)}},
+]
+
 const Navigation = () => {
 
     const Stack = createNativeStackNavigator();
@@ -20,43 +29,16 @@ const Navigation = () => {
         <NavigationContainer ref={navigationRef}>
             <Stack.Navigator>
 
-                <Stack.Screen 
-                name='Auth Screen'
-                component={AuthScreen}
-                options={{ header: () => (<View></View>)}}
-                />
-
-                <Stack.Screen
-                name='Home'
-                component={Home}
-                options={{ header: ({navigation}) => (
-                    <Header navigation={navigation} />
-                )}}
-                />
-
-                <Stack.Screen 
-                name='Create New Task'
-                component={CreateTask}
-                />
-
-                <Stack.Screen 
-                name='Edit Task'
-                component={EditTask}
-                />
-
-
-                <Stack.Screen 
-                name='Signup'
-                component={Signup}
-                options={{ header: () => (<View></View>)}}
-                />
-
-
-                <Stack.Screen 
-                name='Signin'
-                component={Signin}
-                options={{ header: () => (<View></View>)}}
-                />
+                {
+                    screens.map( (screen) => (
+                        <Stack.Screen
+                        key={screen.id}
+                        name={screen.name}
+                        component={screen.component}
+                        options={screen.options}
+                        />
+                    ))
+                }
 
             </Stack.Navigator>
         </NavigationContainer>

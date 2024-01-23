@@ -1,9 +1,6 @@
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-    container: {
-        marginTop:20,
-    },
     titleText: {
         fontSize:32,
         fontWeight:'600',
@@ -18,6 +15,7 @@ export const styles = StyleSheet.create({
     bottomTypoContainer:{
         width:'100%',
         paddingTop:20,
+        paddingBottom:120,
         display:'flex',
         justifyContent:'center',
         alignItems:'center',

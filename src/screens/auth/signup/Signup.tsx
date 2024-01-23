@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Typographie, { BottomTypographie } from "./_components/Typographie";
 import FormBox from "./_components/FormBox";
 import GoogleOAuthBtn from "./_components/GoogleOAuthBtn";
@@ -8,20 +8,20 @@ import GoogleOAuthBtn from "./_components/GoogleOAuthBtn";
 const Signup = ({navigation}) => {
 
     return(
-        <View style={styles.container} >
+        <ScrollView nestedScrollEnabled style={styles.container} >
             <Typographie />
             <FormBox />
             <GoogleOAuthBtn />
             <BottomTypographie 
             navigation={navigation}
             />
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop:60,
+        paddingTop:30,
         paddingStart:25,
         paddingEnd:25,
         backgroundColor:'#fff',

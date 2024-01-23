@@ -22,6 +22,8 @@ const defaultValue = {
     user: {},
     loading: false,
     provider: null,
+    result:{},
+    message:'',
     retrieveToken: () => {},
     signup: (name: string, email:string, password: string, confirmPassword: string) => {},
     signin: (email:string, password: string) => {},
@@ -37,6 +39,8 @@ const Auth = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<User | null>(null);
     const [provider, setProvider] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
+    const [message, setMessage] = useState(null);
 
     const navigation = navigationRef;
 
@@ -56,7 +60,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
                 const decode = await jwtDecode<JwtPayload>(token);
                 if (!decode || !decode.exp || decode.exp <= currentTimeInSeconds)
                 {
-                    navigation.navigate('Signup');
+                    navigation.navigate('Signin');
                     alert('Session expired, please signin to continue.');
                     setAUTH(false);
                     setUser(null);
@@ -70,7 +74,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
                     setAUTH(true);
                     setProvider(provider);
                     setUser(userInfo);
-                    navigation.navigate('Home');
+                    navigation.navigate('Auth Screen');
                 }
                 
             }
@@ -96,7 +100,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             name: name,
             email: email,
             password: password,
-            confirmPassword: confirmPassword
+            passwordConfirm: confirmPassword
         }
 
         try
@@ -112,7 +116,14 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             const result = await response.json();
             if (result.type === 'failed' && result.message)
             {
-                alert(result.message);
+                if (result.element)
+                {
+                    setResult(result);
+                }
+                else
+                {
+                    alert(result.message);
+                }
             } 
             else if (result.type === 'success' && result.auth === 'true')
             {
@@ -157,7 +168,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
             const result = await response.json();
             if (result.type === 'failed' && result.message)
             {
-                alert(result.message);
+                setMessage(result.message);
             } 
             else if (result.type === 'success' && result.auth === 'true')
             {
@@ -298,6 +309,8 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         user,
         loading,
         provider,
+        result,
+        message,
         retrieveToken,
         signup,
         signin,

@@ -15,6 +15,8 @@ export interface AuthContext {
     user: User | null,
     loading: boolean,
     provider: string | null,
+    result: {},
+    message:'',
     retrieveToken: () => void,
     signup: (name: string, email:string, password: string, confirmPassword: string) => void,
     signin: (email:string, password: string) => void,

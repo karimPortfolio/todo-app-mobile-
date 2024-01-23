@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Typographie, { BottomTypographie } from "./_components/Typographie";
 import FormBox from "./_components/FormBox";
 import GoogleOAuthBtn from "./_components/GoogleOAuthBtn";

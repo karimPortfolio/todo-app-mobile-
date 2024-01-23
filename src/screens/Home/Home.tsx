@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import TasksContainer from "./_components/TasksContainer";
 import Typographie from "./_components/Typographie";
 import { styles } from "../../styles/home/home";
@@ -10,8 +10,13 @@ import AddTaskButton from "./_components/AddTaskBtn";
 
 const Home = ({navigation}) => {
 
+    useEffect( () => {
+        StatusBar.setBarStyle('dark-content');
+    },[])
+
     return(
         <SafeAreaView style={styles.container}>
+            <StatusBar />
 
             <ScrollView style={styles.scrollContainer}>
                 <Typographie />

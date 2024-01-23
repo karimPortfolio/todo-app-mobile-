@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
         backgroundColor:'#161a2b',
     },
     scrollContainer:{
-        minHeight:'100%'
+        minHeight:'100%',
     }
 })
 

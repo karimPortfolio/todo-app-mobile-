@@ -17,15 +17,7 @@ export const styles = StyleSheet.create({
         marginTop:45,
         height:55,
     },
-    // input: {
-    //     marginTop:20,
-    //     height:55,
-    //     borderColor:'#cbd5e1'
-    // },
-    // button:{
-    //     marginTop:25,
-    //     height:55
-    // },
+    
     buttonText:{
         color:'#fff',
     }

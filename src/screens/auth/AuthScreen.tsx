@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { Button } from '../../components/Button'
 import { styles } from "../../styles/auth/AuthScreen";
 import { AuthManagementContext } from '../../services/context/Auth';
@@ -19,9 +19,13 @@ const AuthScreen = ({navigation}) => {
         navigation.navigate('Signin');
     }
     
+    useEffect( () => {
+        StatusBar.setBarStyle('light-content');
+    },[])
 
     return(
         <SafeAreaView style={{ backgroundColor:'#161a2b' }} >
+            <StatusBar />
             <ScrollView style={styles.scrollView} >
                 <View style={styles.container}>
                     <Text style={styles.titleText} >Focus on what matter</Text>
