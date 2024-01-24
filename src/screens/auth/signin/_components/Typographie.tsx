@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { styles } from '../../../../styles/auth/signin/Typographie';
 
 const Typographie = () => {
     return (
-        <View style={styles.container} >
+        <View >
+            <View style={styles.imageContainer}>
+                <Image 
+                style={styles.image}
+                source={require('../../../../assets/icon.png')}
+                />
+            </View>
             <Text style={styles.titleText} >Sign in</Text>
             <Text style={styles.paragraphText} >Welcome back again</Text>
         </View>

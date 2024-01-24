@@ -16,6 +16,18 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
         gap:7
     },
+    successContainer:{
+        marginBottom:6,
+        padding:20,
+        paddingLeft:13,
+        backgroundColor:'#10b981',
+        borderRadius:6,
+        display:'flex',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        flexDirection:'row',
+        gap:7
+    },
     text:{
         color:'#dc2626',
         fontSize:13,

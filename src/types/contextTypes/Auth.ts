@@ -21,7 +21,8 @@ export interface AuthContext {
     signup: (name: string, email:string, password: string, confirmPassword: string) => void,
     signin: (email:string, password: string) => void,
     logout: () => void,
-    signinWithGoogle: () => void
+    signinWithGoogle: () => void,
+    forgetPassword: (email: string) => void
 }
 
 

@@ -29,6 +29,7 @@ const defaultValue = {
     signin: (email:string, password: string) => {},
     logout: () => {},
     signinWithGoogle: () => {},
+    forgetPassword: (email: string) => {}
 } as AuthContext
 
 export const AuthManagementContext = createContext(defaultValue);
@@ -150,6 +151,7 @@ const Auth = ({children}: {children: React.ReactNode}) => {
     const signin = async (email: string, password: string) => {
 
         setLoading(true);
+
         const user = {
             email: email,
             password: password,
@@ -271,6 +273,51 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         }
     }
     
+    const forgetPassword = async (email: string) => {
+
+        setLoading(true);
+
+        if (!email)
+        {
+            return alert('Please enter your email');
+        }
+
+        const userEmail = {
+            email: email,
+        }
+
+        try
+        {
+            
+            const url = `${PUBLIC_API_ENDPOINT_HOST}/auth/forget-password`;
+            const response = await fetch(url, {
+                method:'POST',
+                body:JSON.stringify(userEmail),
+                headers:{
+                    'Content-type':'application/json',
+                }
+            })
+            const result = await response.json();
+            console.log(result);
+            if (result.type && result.message)
+            {
+                setResult(result);
+            }
+            else
+            {
+                alert('Something went wrong');
+            }
+        }
+        catch(err)
+        {
+            console.log(err);
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }
+
     const logout = async () => {
 
         try
@@ -315,7 +362,8 @@ const Auth = ({children}: {children: React.ReactNode}) => {
         signup,
         signin,
         logout,
-        signinWithGoogle
+        signinWithGoogle,
+        forgetPassword
     }
 
     return(

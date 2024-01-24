@@ -10,6 +10,7 @@ import AuthScreen from '../screens/auth/AuthScreen';
 import { View } from 'react-native';
 import { navigationRef } from '../services/RootNavigation';
 import Signin from '../screens/auth/signin/Signin';
+import ForgetPassword from '../screens/auth/forgetPassword/ForgetPassword';
 
 
 const screens = [
@@ -19,6 +20,7 @@ const screens = [
     {id:4, name:'Edit Task', component:EditTask, options:{}},
     {id:5, name:'Signup', component:Signup, options:{ header: () => (<View style={{ height:40,width:'100%', backgroundColor:'#fff' }}></View>)}},
     {id:6, name:'Signin', component:Signin, options:{ header: () => (<View></View>)}},
+    {id:7, name:'ForgetPassword', component:ForgetPassword, options:{ header: () => (<View></View>)}},
 ]
 
 const Navigation = () => {

@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, StatusBar } from "react-native";
 import type { SignupFormBox } from "../../../../types/Auth";
 import { Input } from '../../index';
 import { Button } from '../../index';
 import { styles } from "../../../../styles/auth/signin/Formbox";
 import { AuthManagementContext } from "../../index";
 import ErrorsTexts from "./errorsTexts/ErrorsTexts";
-
-
+import ForgetPasswordLink from "./forgetPassword";
 
 
 const FormBox = () => {
@@ -30,9 +29,14 @@ const FormBox = () => {
         setPassword('');
     }
 
+    useEffect( () => {
+        StatusBar.setBarStyle('dark-content');
+    },[]) 
 
     return(
         <View style={styles.container} >
+
+            <StatusBar />
 
             <ErrorsTexts 
             message={message}
@@ -54,6 +58,8 @@ const FormBox = () => {
             )}
             keyExtractor={ (item) => ''+item.id }
             />
+
+            <ForgetPasswordLink />
 
             <Button 
             styles={styles.button} 
